@@ -37,9 +37,11 @@ update msg model =
         GrandchildMsg grandchildMsg ->
             let
                 ( _, grandchildCmd ) =
-                    Grandchild.update grandchildMsg Grandchild.init
+                    Grandchild.update { toMsg = GrandchildMsg }
+                        grandchildMsg
+                        Grandchild.init
             in
-            ( model, Cmd.map GrandchildMsg grandchildCmd )
+            ( model, grandchildCmd )
 
 
 view : Model -> Html Msg

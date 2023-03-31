@@ -3,6 +3,7 @@ module Grandchild exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Task
 
 
 init : Model
@@ -23,21 +24,26 @@ type Msg
     | Value4
 
 
-update : Msg -> Model -> ( Model, Cmd msg )
-update msg model =
+type alias UpdateConfig msg =
+    { toMsg : Msg -> msg
+    }
+
+
+update : UpdateConfig msg -> Msg -> Model -> ( Model, Cmd msg )
+update config msg model =
     case msg of
         Value3 ->
-            ( model, Cmd.none )
+            ( model, Cmd.map config.toMsg (Task.perform identity (Task.succeed Value4)) )
 
         Value4 ->
             ( model, Cmd.none )
 
 
-type alias Config msg =
+type alias ViewConfig msg =
     { toMsg : Msg -> msg }
 
 
-view : Config msg -> Html msg
+view : ViewConfig msg -> Html msg
 view config =
     div []
         [ button [ onClick <| config.toMsg Value3 ] [ text "Some" ]
