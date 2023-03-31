@@ -41,5 +41,5 @@ view : Config msg -> Html msg
 view config =
     div []
         [ button [ onClick <| config.toMsg Value3 ] [ text "Some" ]
-        , button [ onClick <| config.toMsg Value4 ] [ text "Thing" ]
+        , Html.map config.toMsg <| button [ onClick <| Value4 ] [ text "Thing" ]
         ]
